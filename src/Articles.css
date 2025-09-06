@@ -1,60 +1,77 @@
-/* === MODE CLAIR (par défaut) === */
-body {
-  background: #f5f6f8;
+/* Navbar */
+.navbar {
+  display: flex;
+  background: #fff;
+  padding: 10px 20px;
+  border-bottom: 1px solid #ddd;
+  gap: 20px;
+}
+.navbar a {
+  text-decoration: none;
   color: #333;
+  font-weight: bold;
+}
+.navbar a:hover {
+  color: #007bff;
 }
 
+/* Layout principal */
 .app-container {
   display: flex;
-  min-height: 100vh;
+  min-height: calc(100vh - 50px);
+  background: #f5f6f8;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+/* Sidebar */
 .sidebar {
   width: 250px;
   background: #fff;
   border-right: 1px solid #e5e5e5;
   padding: 20px;
 }
-
 .sidebar h2 {
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 15px;
 }
-
 .sidebar ul {
   list-style: none;
   padding: 0;
 }
-
 .sidebar li {
   padding: 8px 0;
   cursor: pointer;
-  color: #333;
   transition: color 0.2s ease-in-out;
 }
-
 .sidebar li:hover {
   color: #007bff;
 }
-
 .sidebar li.active {
   font-weight: bold;
   color: #007bff;
 }
+.sidebar input,
+.sidebar select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
 
+/* Zone principale */
 .main-content {
   flex: 1;
   padding: 30px;
   overflow-y: auto;
 }
-
 .main-content h1 {
   font-size: 24px;
   margin-bottom: 20px;
 }
 
+/* Article Card */
 .article-card {
   background: #fff;
   border-radius: 10px;
@@ -63,23 +80,24 @@ body {
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
-
 .article-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
-
 .article-card h2 {
   font-size: 20px;
   margin-bottom: 10px;
 }
-
 .article-card p {
   color: #666;
   font-size: 14px;
   line-height: 1.4;
 }
+.article-card.read {
+  opacity: 0.6;
+}
 
+/* Meta + actions */
 .article-meta {
   display: flex;
   justify-content: space-between;
@@ -87,58 +105,51 @@ body {
   font-size: 13px;
   color: #999;
 }
-
-.article-card a {
-  display: inline-block;
+.actions {
   margin-top: 10px;
-  font-size: 14px;
-  color: #007bff;
-  text-decoration: none;
+  display: flex;
+  gap: 10px;
+}
+.actions button {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+}
+.actions button:hover {
+  opacity: 0.8;
 }
 
-.article-card a:hover {
-  text-decoration: underline;
+/* Toggle btn */
+.toggle-btn {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  background: #333;
+  color: #fff;
+}
+.dark-mode .toggle-btn {
+  background: #4da3ff;
 }
 
-/* === MODE SOMBRE === */
-body.dark-mode {
-  background: #181a1b;
-  color: #eee;
+/* Mode sombre */
+.dark-mode body,
+.dark-mode .app-container {
+  background: #181818;
+  color: #f0f0f0;
 }
-
-body.dark-mode .sidebar {
-  background: #202224;
-  border-right: 1px solid #333;
-  color: #eee;
+.dark-mode .sidebar {
+  background: #222;
+  border-right: 1px solid #444;
 }
-
-body.dark-mode .sidebar li {
-  color: #ccc;
+.dark-mode .article-card {
+  background: #2a2a2a;
+  box-shadow: none;
 }
-
-body.dark-mode .sidebar li.active {
-  color: #4da3ff;
-}
-
-body.dark-mode .main-content {
-  background: #181a1b;
-  color: #eee;
-}
-
-body.dark-mode .article-card {
-  background: #202224;
-  color: #eee;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
-}
-
-body.dark-mode .article-card p {
-  color: #bbb;
-}
-
-body.dark-mode .article-meta {
-  color: #aaa;
-}
-
-body.dark-mode .article-card a {
-  color: #4da3ff;
+.dark-mode .navbar {
+  background: #222;
+  border-bottom: 1px solid #444;
 }

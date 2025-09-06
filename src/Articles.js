@@ -6,6 +6,8 @@ export default function Articles() {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [darkMode, setDarkMode] = useState(false);
+  const [search, setSearch] = useState("");
+  const [sort, setSort] = useState("");
 
   // Charger darkMode depuis localStorage au démarrage
   useEffect(() => {
@@ -29,9 +31,10 @@ export default function Articles() {
 
   // Charger articles
   useEffect(() => {
-    const url = selectedCategory
-      ? `http://rss-backend.test/api/articles?category=${selectedCategory}`
-      : "http://rss-backend.test/api/articles";
+    const url = new URL("http://rss-backend.test/api/articles");
+    if (selectedCategory) url.searchParams.append("category", selectedCategory);
+    if (search) url.searchParams.append("q", search);
+    if (sort) url.searchParams.append("sort", sort);
 
     fetch(url)
       .then((res) => res.json())
@@ -40,7 +43,23 @@ export default function Articles() {
         const cats = [...new Set(data.map((a) => a.category))].filter(Boolean);
         setCategories(cats);
       });
-  }, [selectedCategory]);
+  }, [selectedCategory, search, sort]);
+
+  function markAsRead(id) {
+    fetch(`http://rss-backend.test/api/articles/${id}/read`, {
+      method: "PATCH",
+    }).then(() => {
+      setArticles((prev) =>
+        prev.map((a) => (a.id === id ? { ...a, is_read: true } : a))
+      );
+    });
+  }
+
+  function addFavorite(id) {
+    fetch(`http://rss-backend.test/api/articles/${id}/favorite`, {
+      method: "POST",
+    });
+  }
 
   return (
     <div className="app-container">
@@ -65,19 +84,27 @@ export default function Articles() {
           ))}
         </ul>
 
+        {/* Recherche */}
+        <input
+          type="text"
+          placeholder="🔍 Rechercher..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+
+        {/* Tri */}
+        <select onChange={(e) => setSort(e.target.value)} value={sort}>
+          <option value="">Trier par défaut</option>
+          <option value="pub_date">Date</option>
+          <option value="title">Titre</option>
+          <option value="source">Source</option>
+        </select>
+
         {/* Toggle Dark Mode */}
         <div style={{ marginTop: "20px" }}>
           <button
             onClick={() => setDarkMode(!darkMode)}
-            style={{
-              padding: "8px 12px",
-              borderRadius: "6px",
-              border: "none",
-              cursor: "pointer",
-              background: darkMode ? "#4da3ff" : "#333",
-              color: "#fff",
-              fontWeight: "bold",
-            }}
+            className="toggle-btn"
           >
             {darkMode ? "🌞 Mode clair" : "🌙 Mode sombre"}
           </button>
@@ -90,16 +117,23 @@ export default function Articles() {
           {selectedCategory ? `Articles : ${selectedCategory}` : "Tous les articles"}
         </h1>
         {articles.map((article) => (
-          <div className="article-card" key={article.id}>
+          <div
+            className={`article-card ${article.is_read ? "read" : ""}`}
+            key={article.id}
+          >
             <h2>{article.title}</h2>
             <p>{article.description}</p>
             <div className="article-meta">
               <span>📌 {article.source}</span>
               <span>{new Date(article.pub_date).toLocaleDateString()}</span>
             </div>
-            <a href={article.link} target="_blank" rel="noopener noreferrer">
-              Lire l'article →
-            </a>
+            <div className="actions">
+              <a href={article.link} target="_blank" rel="noopener noreferrer">
+                Lire l'article →
+              </a>
+              <button onClick={() => markAsRead(article.id)}>✅ Lu</button>
+              <button onClick={() => addFavorite(article.id)}>⭐ Favori</button>
+            </div>
           </div>
         ))}
       </main>

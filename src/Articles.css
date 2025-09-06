@@ -1,0 +1,144 @@
+/* === MODE CLAIR (par défaut) === */
+body {
+  background: #f5f6f8;
+  color: #333;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.sidebar {
+  width: 250px;
+  background: #fff;
+  border-right: 1px solid #e5e5e5;
+  padding: 20px;
+}
+
+.sidebar h2 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  padding: 8px 0;
+  cursor: pointer;
+  color: #333;
+  transition: color 0.2s ease-in-out;
+}
+
+.sidebar li:hover {
+  color: #007bff;
+}
+
+.sidebar li.active {
+  font-weight: bold;
+  color: #007bff;
+}
+
+.main-content {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+}
+
+.main-content h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.article-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.article-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.article-card h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.article-card p {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.article-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  font-size: 13px;
+  color: #999;
+}
+
+.article-card a {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 14px;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.article-card a:hover {
+  text-decoration: underline;
+}
+
+/* === MODE SOMBRE === */
+body.dark-mode {
+  background: #181a1b;
+  color: #eee;
+}
+
+body.dark-mode .sidebar {
+  background: #202224;
+  border-right: 1px solid #333;
+  color: #eee;
+}
+
+body.dark-mode .sidebar li {
+  color: #ccc;
+}
+
+body.dark-mode .sidebar li.active {
+  color: #4da3ff;
+}
+
+body.dark-mode .main-content {
+  background: #181a1b;
+  color: #eee;
+}
+
+body.dark-mode .article-card {
+  background: #202224;
+  color: #eee;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}
+
+body.dark-mode .article-card p {
+  color: #bbb;
+}
+
+body.dark-mode .article-meta {
+  color: #aaa;
+}
+
+body.dark-mode .article-card a {
+  color: #4da3ff;
+}

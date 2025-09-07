@@ -5,7 +5,7 @@ export default function Favorites() {
   const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
-    fetch("http://rss-backend.test/api/favorites")
+    fetch("http://backend:9000/api/favorites")
       .then((res) => res.json())
       .then((data) => setFavorites(data));
   }, []);

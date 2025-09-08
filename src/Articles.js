@@ -30,7 +30,7 @@ export default function Articles() {
   }, [darkMode]);
 
   // Charger articles
-  useEffect(() => {
+  const fetchArticles = () => {
     const url = new URL("http://backend:9080/api/articles");
     if (selectedCategory) url.searchParams.append("category", selectedCategory);
     if (search) url.searchParams.append("q", search);
@@ -42,9 +42,18 @@ export default function Articles() {
         setArticles(data);
         const cats = [...new Set(data.map((a) => a.category))].filter(Boolean);
         setCategories(cats);
-      });
+      })
+      .catch((err) => console.error("Erreur fetch articles:", err));
+    };
+
+  // Charger articles + polling automatique toutes les 60s
+  useEffect(() => {
+    fetchArticles();
+    const interval = setInterval(fetchArticles, 60000); //60s
+    return () => clearInterval(interval); //nettoyage
   }, [selectedCategory, search, sort]);
 
+  // Marquer comme lu
   function markAsRead(id) {
     fetch(`http://backend:9080/api/articles/${id}/read`, {
       method: "PATCH",

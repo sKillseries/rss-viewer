@@ -31,7 +31,7 @@ export default function Articles() {
 
   // Charger articles
   useEffect(() => {
-    const url = new URL("http://backend:9000/api/articles");
+    const url = new URL("http://backend:9080/api/articles");
     if (selectedCategory) url.searchParams.append("category", selectedCategory);
     if (search) url.searchParams.append("q", search);
     if (sort) url.searchParams.append("sort", sort);
@@ -46,7 +46,7 @@ export default function Articles() {
   }, [selectedCategory, search, sort]);
 
   function markAsRead(id) {
-    fetch(`http://backend:9000/api/articles/${id}/read`, {
+    fetch(`http://backend:9080/api/articles/${id}/read`, {
       method: "PATCH",
     }).then(() => {
       setArticles((prev) =>
@@ -56,7 +56,7 @@ export default function Articles() {
   }
 
   function addFavorite(id) {
-    fetch(`http://backend:9000/api/articles/${id}/favorite`, {
+    fetch(`http://backend:9080/api/articles/${id}/favorite`, {
       method: "POST",
     });
   }

@@ -33,38 +33,36 @@ export default function Articles() {
   useEffect(() => {
     function fetchArticles() {
       const url = new URL("http://backend:9080/api/articles");
-      if (selectedCategory) url.searchParams.append("category", selectedCategory);
-      if (search) url.searchParams.append("q", search);
       if (sort) url.searchParams.append("sort", sort);
 
       fetch(url)
         .then((res) => res.json())
         .then((data) => {
-          // Normalisation  des catégories (tags)
+          // ✅ Normalisation des catégories/tags
           const normalized = data.map((a) => ({
             ...a,
-            categories: Array.isArray(a.category)
-              ? a.category
-              : String(a.category)
-                  .replace(/[{}"]/g, "") // Supprime { } "
-                  .split(",")            // découpe par virgule
-                  .map((c) => c.trim())  // nettoie espaces
-                  .filter(Boolean),
-        }));
+            categories: a.category
+              ? (Array.isArray(a.category) ? a.category : String(a.category))
+                  .replace(/[{}"]/g, "")
+                  .split(",")
+                  .map((c) => c.trim())
+                  .filter(Boolean)
+              : [],
+          }));
 
-        setArticles(normalized);
+          setArticles(normalized);
 
-        // Extraire tous les tags uniques
-        const allTags = normalized.flatMap((a) => a.categories);
-        setCategories([...new Set(allTags)]);
-      })
-      .catch((err) => console.error("Erreur fetch articles:", err));
+          // ✅ Extraire tous les tags uniques
+          const allTags = normalized.flatMap((a) => a.categories);
+          setCategories([...new Set(allTags)]);
+        })
+        .catch((err) => console.error("Erreur fetch articles:", err));
     }
 
     fetchArticles();
-    const interval = setInterval(fetchArticles, 60000); //60s
-    return () => clearInterval(interval); //nettoyage
-  }, [selectedCategory, search, sort]);
+    const interval = setInterval(fetchArticles, 60000); // 60s
+    return () => clearInterval(interval);
+  }, [sort]);
 
   // Marquer comme lu
   function markAsRead(id) {
@@ -83,28 +81,46 @@ export default function Articles() {
     });
   }
 
+  // ✅ Appliquer recherche insensible à la casse + filtre catégorie
+  const filteredArticles = articles.filter((article) => {
+    let matchesSearch = true;
+    let matchesCategory = true;
+
+    if (search) {
+      const q = search.toLowerCase();
+      matchesSearch =
+        article.title.toLowerCase().includes(q) ||
+        article.description.toLowerCase().includes(q) ||
+        article.categories.some((c) => c.toLowerCase().includes(q));
+    }
+
+    if (selectedCategory) {
+      matchesCategory = article.categories
+        .map((c) => c.toLowerCase())
+        .includes(selectedCategory.toLowerCase());
+    }
+
+    return matchesSearch && matchesCategory;
+  });
+
   return (
     <div className="app-container">
       {/* Sidebar */}
       <aside className="sidebar">
         <h2>Catégories</h2>
-        <ul>
-          <li
-            className={!selectedCategory ? "active" : ""}
-            onClick={() => setSelectedCategory(null)}
-          >
-            Tous les articles
-          </li>
+        <select
+          onChange={(e) =>
+            setSelectedCategory(e.target.value || null)
+          }
+          value={selectedCategory || ""}
+        >
+          <option value="">Tous les articles</option>
           {categories.map((cat, idx) => (
-            <li
-              key={idx}
-              className={selectedCategory === cat ? "active" : ""}
-              onClick={() => setSelectedCategory(cat)}
-            >
+            <option key={idx} value={cat}>
               {cat}
-            </li>
+            </option>
           ))}
-        </ul>
+        </select>
 
         {/* Recherche */}
         <input
@@ -136,9 +152,11 @@ export default function Articles() {
       {/* Liste des articles */}
       <main className="main-content">
         <h1>
-          {selectedCategory ? `Articles : ${selectedCategory}` : "Tous les articles"}
+          {selectedCategory
+            ? `Articles : ${selectedCategory}`
+            : "Tous les articles"}
         </h1>
-        {articles.map((article) => (
+        {filteredArticles.map((article) => (
           <div
             className={`article-card ${article.is_read ? "read" : ""}`}
             key={article.id}
@@ -149,6 +167,20 @@ export default function Articles() {
               <span>📌 {article.source}</span>
               <span>{new Date(article.pub_date).toLocaleDateString()}</span>
             </div>
+
+            {/* ✅ Tags cliquables */}
+            <div className="tags">
+              {article.categories.map((tag, i) => (
+                <span
+                  key={i}
+                  className="tag"
+                  onClick={() => setSelectedCategory(tag)}
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
+
             <div className="actions">
               <a href={article.link} target="_blank" rel="noopener noreferrer">
                 Lire l'article →

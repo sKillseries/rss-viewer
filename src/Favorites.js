@@ -6,7 +6,7 @@ export default function Favorites() {
 
   // Fonction pour charger les favoris
   const fetchFavorites = () => {
-    fetch("http://backend/api/favorites")
+    fetch("http://backend:9080/api/favorites")
       .then((res) => res.json())
       .then((data) => setFavorites(data))
       .catch((err) => console.error("Erreur fetch favoris:", err));
@@ -14,7 +14,7 @@ export default function Favorites() {
 
   // Fonction pour supprimer un favori
   const removeFavorite = (id) => {
-    fetch(`http://backend/api/favorites/${id}`, {
+    fetch(`http://backend:9080/api/favorites/${id}`, {
       method: "DELETE",
     })
       .then((res) => {

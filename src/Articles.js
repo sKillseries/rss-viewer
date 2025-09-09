@@ -29,25 +29,38 @@ export default function Articles() {
     }
   }, [darkMode]);
 
-  // Charger articles
-  const fetchArticles = () => {
-    const url = new URL("http://backend/api/articles");
-    if (selectedCategory) url.searchParams.append("category", selectedCategory);
-    if (search) url.searchParams.append("q", search);
-    if (sort) url.searchParams.append("sort", sort);
+  // Charger articles + polling
+  useEffect(() => {
+    function fetchArticles() {
+      const url = new URL("http://backend:9080/api/articles");
+      if (selectedCategory) url.searchParams.append("category", selectedCategory);
+      if (search) url.searchParams.append("q", search);
+      if (sort) url.searchParams.append("sort", sort);
 
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => {
-        setArticles(data);
-        const cats = [...new Set(data.map((a) => a.category))].filter(Boolean);
-        setCategories(cats);
+      fetch(url)
+        .then((res) => res.json())
+        .then((data) => {
+          // Normalisation  des catégories (tags)
+          const normalized = data.map((a) => ({
+            ...a,
+            categories: Array.isArray(a.category)
+              ? a.category
+              : String(a.category)
+                  .replace(/[{}"]/g, "") // Supprime { } "
+                  .split(",")            // découpe par virgule
+                  .map((c) => c.trim())  // nettoie espaces
+                  .filter(Boolean),
+        }));
+
+        setArticles(normalized);
+
+        // Extraire tous les tags uniques
+        const allTags = normalized.flatMap((a) => a.categories);
+        setCategories([...new Set(allTags)]);
       })
       .catch((err) => console.error("Erreur fetch articles:", err));
-    };
+    }
 
-  // Charger articles + polling automatique toutes les 60s
-  useEffect(() => {
     fetchArticles();
     const interval = setInterval(fetchArticles, 60000); //60s
     return () => clearInterval(interval); //nettoyage
@@ -55,7 +68,7 @@ export default function Articles() {
 
   // Marquer comme lu
   function markAsRead(id) {
-    fetch(`http://backend/api/articles/${id}/read`, {
+    fetch(`http://backend:9080/api/articles/${id}/read`, {
       method: "PATCH",
     }).then(() => {
       setArticles((prev) =>
@@ -65,7 +78,7 @@ export default function Articles() {
   }
 
   function addFavorite(id) {
-    fetch(`http://backend/api/articles/${id}/favorite`, {
+    fetch(`http://backend:9080/api/articles/${id}/favorite`, {
       method: "POST",
     });
   }

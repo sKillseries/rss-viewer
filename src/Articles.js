@@ -133,7 +133,7 @@ export default function Articles() {
         {/* Tri */}
         <select onChange={(e) => setSort(e.target.value)} value={sort}>
           <option value="">Trier par défaut</option>
-          <option value="pub_date">Date (plus récent)</option>
+          <option value="pub_date">Date (plus ancien)</option>
           <option value="title">Titre (A → Z)</option>
           <option value="source">Source (A → Z)</option>
         </select>

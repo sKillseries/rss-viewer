@@ -109,6 +109,24 @@ export default function Favorites() {
     setFavorites(applySort(rawFavorites, sort));
   }, [sort, rawFavorites]);
 
+  // Supprimer un favori
+  async function removeFavorite(id) {
+    try {
+      const res = await fetch(`http://backend:9080/api/favorites/${id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) {
+        console.error(`Erreur suppression favori (${res.status})`);
+        return;
+      }
+      // Mise à jour locale
+      setFavorites((prev) => prev.filter((f) => f.id !==id));
+      setRawFavorites((prev) => prev.filter((f) => f.id !== id));
+    } catch (err) {
+      console.error("Erreur suppression favori:", err);
+    }
+  }
+
   return (
     <div className="app-container">
       <aside className="sidebar">
@@ -157,6 +175,7 @@ export default function Favorites() {
                 <a href={fav.article?.link} target="_blank" rel="noopener noreferrer">
                   Lire l'article →
                 </a>
+                <button onClick={() => removeFavorite(fav.id)}>🗑️ Supprimer des favoris</button>
               </div>
             </div>
           ))

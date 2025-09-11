@@ -149,11 +149,23 @@
   background: #2a2a2a;
   box-shadow: none;
 }
+
+.dark-mode .article-card p {
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
 .dark-mode .navbar {
   background: #222;
   border-bottom: 1px solid #444;
 }
 
+.dark-mode .navbar a {
+  text-decoration: none;
+  color: #fff;
+  font-weight: bold;
+}
 /* Bouton supprimer favori */
 .remove-btn {
   background-color: #e74c3c; /* rouge */
@@ -198,11 +210,12 @@
 }
 
 body.dark-mode .tag {
-  background: #444;
+  background: #eee;
+  color: #333
 }
 
 body.dark-mode .tag:hover {
-  background: #444;
+  background: #ddd;
 }
 
 body.dark-mode .tag.active {

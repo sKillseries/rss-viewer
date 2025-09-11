@@ -107,14 +107,13 @@ export default function Articles() {
     <div className="app-container">
       {/* Sidebar */}
       <aside className="sidebar">
-        <h2>Catégories</h2>
         <select
           onChange={(e) =>
             setSelectedCategory(e.target.value || null)
           }
           value={selectedCategory || ""}
         >
-          <option value="">Tous les articles</option>
+          <option value="">Toutes les catégories</option>
           {categories.map((cat, idx) => (
             <option key={idx} value={cat}>
               {cat}
@@ -133,9 +132,9 @@ export default function Articles() {
         {/* Tri */}
         <select onChange={(e) => setSort(e.target.value)} value={sort}>
           <option value="">Trier par défaut</option>
-          <option value="pub_date">Date</option>
-          <option value="title">Titre</option>
-          <option value="source">Source</option>
+          <option value="pub_date">Date (plus récent)</option>
+          <option value="title">Titre (A → Z)</option>
+          <option value="source">Source (A → Z)</option>
         </select>
 
         {/* Toggle Dark Mode */}

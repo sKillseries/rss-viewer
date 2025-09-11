@@ -107,6 +107,15 @@ export default function Articles() {
     <div className="app-container">
       {/* Sidebar */}
       <aside className="sidebar">
+        {/* Recherche */}
+        <input
+          type="text"
+          placeholder="🔍 Rechercher..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+
+        {/* Categories/tags */}
         <select
           onChange={(e) =>
             setSelectedCategory(e.target.value || null)
@@ -120,14 +129,6 @@ export default function Articles() {
             </option>
           ))}
         </select>
-
-        {/* Recherche */}
-        <input
-          type="text"
-          placeholder="🔍 Rechercher..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
 
         {/* Tri */}
         <select onChange={(e) => setSort(e.target.value)} value={sort}>

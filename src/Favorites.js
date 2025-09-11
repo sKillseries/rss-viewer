@@ -5,12 +5,17 @@ export default function Favorites() {
   const [favorites, setFavorites] = useState([]);
 
   // Fonction pour charger les favoris
-  const fetchFavorites = () => {
+  useEffect(() => {
     fetch("http://backend:9080/api/favorites")
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Erreur HTTP ${res.status}`);
+        }
+        return res.json();
+      })
       .then((data) => setFavorites(data))
       .catch((err) => console.error("Erreur fetch favoris:", err));
-  };
+  }, []);
 
   // Fonction pour supprimer un favori
   const removeFavorite = (id) => {
@@ -27,13 +32,6 @@ export default function Favorites() {
       })
       .catch((err) => console.error("Erreur réseau:", err));
   };
-
-  // Charger favoris = polling automatique
-  useEffect(() => {
-    fetchFavorites();
-    const interval = setInterval(fetchFavorites, 60000); // 60s
-    return () => clearInterval(interval); // nettoyage intervalle
-  })
 
   return (
     <div className="main-content">

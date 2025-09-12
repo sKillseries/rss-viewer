@@ -32,7 +32,7 @@ export default function Articles() {
   // Charger articles + polling
   useEffect(() => {
     function fetchArticles() {
-      const url = new URL("http://backend:9080/api/articles");
+      const url = new URL("/api/articles", window.location.origin); // Via proxy Nginx
       if (sort) url.searchParams.append("sort", sort);
 
       fetch(url)
@@ -66,7 +66,7 @@ export default function Articles() {
 
   // Marquer comme lu
   function markAsRead(id) {
-    fetch(`http://backend:9080/api/articles/${id}/read`, {
+    fetch(`/api/articles/${id}/read`, {
       method: "PATCH",
     }).then(() => {
       setArticles((prev) =>
@@ -76,7 +76,7 @@ export default function Articles() {
   }
 
   function addFavorite(id) {
-    fetch(`http://backend:9080/api/articles/${id}/favorite`, {
+    fetch(`/api/articles/${id}/favorite`, {
       method: "POST",
     });
   }

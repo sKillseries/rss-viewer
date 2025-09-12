@@ -41,7 +41,7 @@ export default function Favorites() {
 
     async function fetchFavorites() {
       try {
-        const url = new URL("http://backend:9080/api/favorites");
+        const url = new URL("/api/favorites", window.location.origin); // Via proxy Nginx
         if (debouncedSearch) url.searchParams.append("q", debouncedSearch.toLowerCase());
 
         const res = await fetch(url, { signal: controller.signal });
@@ -112,7 +112,7 @@ export default function Favorites() {
   // Supprimer un favori
   async function removeFavorite(id) {
     try {
-      const res = await fetch(`http://backend:9080/api/favorites/${id}`, {
+      const res = await fetch(`/api/favorites/${id}`, {
         method: "DELETE",
       });
       if (!res.ok) {

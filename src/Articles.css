@@ -5,6 +5,7 @@
   padding: 10px 20px;
   border-bottom: 1px solid #ddd;
   gap: 20px;
+  flex-wrap: wrap; /* ajouté pour que la navbar passe sur 2 lignes en petit écran */
 }
 .navbar a {
   text-decoration: none;
@@ -21,6 +22,7 @@
   min-height: calc(100vh - 50px);
   background: #f5f6f8;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  gap: 20px; /* ajouté pour aérer entre sidebar et contenu */
 }
 
 /* Sidebar */
@@ -29,6 +31,7 @@
   background: #fff;
   border-right: 1px solid #e5e5e5;
   padding: 20px;
+  flex-shrink: 0; /* ajouté pour éviter l'écrasement sur petit écran */
 }
 .sidebar h2 {
   font-size: 18px;
@@ -54,10 +57,12 @@
 .sidebar input,
 .sidebar select {
   width: 100%;
-  padding: 8px;
+  padding: 8px 10px;
   margin-top: 10px;
   border: 1px solid #ccc;
   border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 14px;
 }
 
 /* Zone principale */
@@ -104,11 +109,14 @@
   margin-top: 10px;
   font-size: 13px;
   color: #999;
+  flex-wrap: wrap; /* ajouté pour éviter chevauchement sur mobile */
+  gap: 5px; /* ajouté pour lisibilité */
 }
 .actions {
   margin-top: 10px;
   display: flex;
   gap: 10px;
+  flex-wrap: wrap; /* ajouté pour que les boutons passent à la ligne */
 }
 .actions button {
   padding: 6px 10px;
@@ -116,6 +124,8 @@
   border: none;
   cursor: pointer;
   font-size: 13px;
+  flex: 1; /* ajouté pour que les boutons occupent toute la largeur sur mobile */
+  min-width: 100px; /* évite les boutons trop petits */
 }
 .actions button:hover {
   opacity: 0.8;
@@ -221,4 +231,57 @@ body.dark-mode .tag:hover {
 body.dark-mode .tag.active {
   background: #007bff;
   color: white;
+}
+
+/* Media queries pour le responsive */
+@media (max-width: 768px) {
+  .app-container {
+    flex-direction: column; /* Sidebar passe au-dessus */
+    padding: 10px;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .sidebar {
+    width: 100% !important; /* prend toute la largeur */
+    max-width: 100% !important;
+    padding: 10px 20px;
+    border-right: none;
+    border-bottom: 1px solid #ddd; /* séparation visuelle */
+    box-sizing: border-box;
+  }
+
+  .main-content {
+    padding: 15px; /* réduit padding sur mobile */
+  }
+
+  .article-card {
+    padding: 15px; /* réduit marges internes */
+  }
+
+  .article-meta {
+    flex-direction: column; /* source et date l'une sous l'autre */
+    align-items: flex-start;
+  }
+
+  .actions {
+    flex-direction: column; /* boutons empilés */
+  }
+
+  .actions button {
+    width: 100%; /* occupe toute la largeur */
+  }
+}
+
+/* Responsive : petits téléphones */
+@media (max-width: 480px) {
+  .main-content h1 {
+    font-size: 18px; /* titre plus petit */
+  }
+  .article-card h2 {
+    font-size: 16px;
+  }
+  .navbar {
+    gap: 10px; /* réduit espace */
+  }
 }

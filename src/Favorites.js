@@ -172,9 +172,9 @@ export default function Favorites() {
                 </span>
               </div>
               <div className="actions">
-                <a href={fav.article?.link} target="_blank" rel="noopener noreferrer">
+                <button onClick={() => window.open(fav.article?.link, "_blank", "noopener,noreferrer")}>
                   Lire l'article →
-                </a>
+                </button>
                 <button onClick={() => removeFavorite(fav.id)}>🗑️ Supprimer des favoris</button>
               </div>
             </div>

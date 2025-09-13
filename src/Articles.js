@@ -182,9 +182,9 @@ export default function Articles() {
             </div>
 
             <div className="actions">
-              <a href={article.link} target="_blank" rel="noopener noreferrer">
+              <button onClick={() => window.open(article.link, "_blank", "noopener,noreferrer")}>
                 Lire l'article →
-              </a>
+              </button>
               <button onClick={() => markAsRead(article.id)}>✅ Lu</button>
               <button onClick={() => addFavorite(article.id)}>⭐ Favori</button>
             </div>

@@ -78,6 +78,12 @@ export default function Articles() {
   function addFavorite(id) {
     fetch(`/api/articles/${id}/favorite`, {
       method: "POST",
+    }).then(() => {
+        setArticles((prev) =>
+          prev.map((a) =>
+            a.id === id ? { ...a, is_favorite: true } :a
+          )
+        );
     });
   }
 
@@ -185,8 +191,16 @@ export default function Articles() {
               <button onClick={() => window.open(article.link, "_blank", "noopener,noreferrer")}>
                 Lire l'article →
               </button>
-              <button onClick={() => markAsRead(article.id)}>✅ Lu</button>
-              <button onClick={() => addFavorite(article.id)}>⭐ Favori</button>
+              {article.is_read ? (
+                <button disabled>✅ Lu</button>
+              ) : (
+                <button onClick={() => markAsRead(article.id)}>Marquer comme lu</button>
+              )}
+              {article.is_favorite ? (
+                <button disable>⭐ Favori</button>
+              ) : (
+                <button onClick={() => addFavorite(article.id)}>Mettre en favori</button>
+              )}
             </div>
           </div>
         ))}
